@@ -23,6 +23,11 @@ def main(sector: str, queueName: str) -> None:
     #
     #                       WRITE CODE HERE!!!
     #
+    """
+    Implement Logic to Create Binding Key from the variables. When binding the Queue to the exchange ensure that routing key utilizies one of the special cases for binding keys such as * (star) or # (hash). For instance. "#.Google.#" as a binding key for a Queue will ensure that all messages with a key containing the word Google such as Stock.Google.tech will have their messages routed to that Queue. Please consult with your partner and agree on what the binding and routing key should look like first!
+    """
+    
+    bindingKey = f"#.{sector}.#"
     
     consumer = mqConsumer(binding_key=bindingKey,exchange_name="Tech Lab Topic Exchange",queue_name=queueName)    
     consumer.startConsuming()
@@ -35,5 +40,7 @@ if __name__ == "__main__":
     #
     #                       WRITE CODE HERE!!!
     #
+    sector = sys.argv[1]
+    queue = sys.argv[2]
 
     sys.exit(main(sector,queue))
