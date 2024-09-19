@@ -22,7 +22,7 @@ class mqProducer(mqProducerInterface):
         # Create the exchange if not already present
         self.exchange = self.channel.exchange_declare(exchange=self.exchange_name)
         
-        self.publishOrder("Hello World")
+        self.publishOrder("Success! Producer And Consumer Section Complete.")
 
     def publishOrder(self, message: str) -> None:
 
