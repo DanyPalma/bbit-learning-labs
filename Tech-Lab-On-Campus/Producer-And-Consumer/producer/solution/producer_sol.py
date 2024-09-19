@@ -22,14 +22,14 @@ class mqProducer(mqProducerInterface):
         # Create the exchange if not already present
         self.exchange = self.channel.exchange_declare(exchange=self.exchange_name)
         
-        self.publishOrder("Success! Producer And Consumer Section Complete.")
+        self.publishOrder
 
     def publishOrder(self, message: str) -> None:
 
         self.channel.basic_publish(
             exchange=self.exchange_name,
             routing_key=self.routing_key,
-            body=message
+            body=message,
         )
         self.channel.close()
         self.connection.close()
