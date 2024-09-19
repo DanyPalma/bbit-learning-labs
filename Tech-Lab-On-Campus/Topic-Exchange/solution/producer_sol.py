@@ -19,17 +19,25 @@ class mqProducer(mqProducerInterface):
         # Establish Channel
         self.channel = self.connection.channel()
 
-        # Create the exchange if not already present
+        # Create the topic exchange if not already present
         self.exchange = self.channel.exchange_declare(exchange=self.exchange_name, exchange_type="topic")
         
         self.publishOrder
 
-    def publishOrder(self, message: str) -> None:
 
+    def publishOrder(self, message: str) -> None:
+        # Create Appropiate Topic String
+        
+
+        # Send serialized message or String
         self.channel.basic_publish(
             exchange=self.exchange_name,
             routing_key=self.routing_key,
             body=message,
         )
+
+        # Print Confirmation
+
+        # Close channel and connection
         self.channel.close()
         self.connection.close()
