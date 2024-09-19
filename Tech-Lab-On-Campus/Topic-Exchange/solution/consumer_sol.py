@@ -4,8 +4,8 @@ import os
 from consumer_interface import mqConsumerInterface
 
 class mqConsumer(mqConsumerInterface):
-    def __init__(self, binding_key: str, exchange_name: str, queue_name: str) -> None:
-        self.binding_key = binding_key
+    def __init__(self, binding_keys: str, exchange_name: str, queue_name: str) -> None:
+        self.binding_keys = binding_keys
         self.exchange_name = exchange_name
         self.queue_name = queue_name
         
@@ -20,19 +20,31 @@ class mqConsumer(mqConsumerInterface):
         self.channel = connection.channel()
 
         # Create Queue if not already present
-        self.channel.queue_declare(queue=self.queue_name)
+        self.createQueue(self.queue_name)
         # Create the exchange if not already present
         self.exchange = self.channel.exchange_declare(exchange=self.exchange_name, exchange_type='topic')
         # Bind Binding Key to Queue on the exchange
+        for exchange_name in self.binding_keys:
+            self.bindQueueToExchange(self.queue_name, exchange_name)
+    
+    def bindQueueToExchange(self, queueName: str, topic: str) -> None:
+        # Bind Binding Key to Queue on the exchange
         self.channel.queue_bind(
-            queue=self.queue_name,
-            routing_key=self.binding_key,
+            queue=queueName,
+            routing_key=topic,
             exchange=self.exchange_name,
         )
+
+
+    def createQueue(self, queueName: str) -> None:
+        # Create Queue if not already present
+        self.channel.queue_declare(queue=queueName)
         # Set-up Callback function for receiving messages
         self.channel.basic_consume(
-            self.queue_name, self.on_message_callback  , auto_ack=False
+            queueName, self.on_message_callback  , auto_ack=False
         )
+        
+
     
     def on_message_callback(
         self, channel, method_frame, header_frame, body
